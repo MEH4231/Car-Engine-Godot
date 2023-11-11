@@ -31,6 +31,8 @@ func _physics_process(_delta):
 	else:
 		EngineOff()
 	ComputeTorque()
+	
+	SnapToInt()
 
 func Controls():
 	if Input.is_action_just_pressed("GearUp"):
@@ -77,4 +79,10 @@ func ComputeTorque():
 	Resistance = Torque / Power
 	if Resistance < 1:
 		Resistance = 1
+
+func SnapToInt():
+	Resistance = snappedi(Resistance, 1)
+	Torque = snappedi(Torque, 1)
+	RPM = snappedi(RPM ,1)
+
 
