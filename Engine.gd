@@ -2,35 +2,60 @@ extends Node
 
 var EngineOn = false
 
-var Speed = 0
+var Power = 100
+var Resistance = 1
+var Torque = 0
 var RPM = 0
+var Gear = 1
+
+var GearRatio0 = 1
+var GearRatio1 = 1
+var GearRatio2 = 0.8
+var GearRatio3 = 0.5
+var GearRatio4 = 0.3
+var GearMaxRPM0 = 2800
 var GearMaxRPM1 = 3500
-var GearMaxRPM2 = 5800
-var GearMaxRPM3 = 7200
-var GearMaxRPM4 = 10000
+var GearMaxRPM2 = 6000
+var GearMaxRPM3 = 7800
+var GearMaxRPM4 = 9600
+
 
 func _physics_process(_delta):
-	print(RPM)
+	print("Gear   " + str(Gear))
+	print("Res    " + str(Resistance))
+	print("RPM    " + str(RPM))
+	print("Torque " + str(Torque))
 	Controls()
 	if EngineOn == true:
 		RunEngine()
 	else:
 		EngineOff()
+	ComputeTorque()
 
 func Controls():
+	if Input.is_action_just_pressed("GearUp"):
+		if Gear < 4:
+			Gear += 1
+	if Input.is_action_just_pressed("GearDown"):
+		if Gear > 0:
+			Gear -= 1
 	if Input.is_action_just_pressed("EngineToggle"):
 		EngineOn = !EngineOn
 
 func RunEngine():
 	if Input.is_action_pressed("Accelerate"):
-		RPM += 500
-	elif Input.is_action_pressed("Brake"):
-		pass
+		if RPM < get("GearMaxRPM" + str(Gear)):
+			RPM += (Power / Resistance) * get("GearRatio" + str(Gear))
+			RPM += 1
+		elif RPM > get("GearMaxRPM" + str(Gear)):
+			RPM -= ((get("GearMaxRPM" + str(Gear)) / (Gear + 1)) / 100)
 	else:
-		if RPM <= 500:
-			RPM += (RPM / 10) + 1
-		elif RPM > 500:
-			RPM -= (RPM / 10)
+		if RPM <= 800:
+			RPM += (RPM / 20) + 1
+		elif RPM > 800:
+			RPM -= (RPM / 20)
+	if Input.is_action_pressed("Brake"):
+		pass
 
 func EngineOff():
 	if RPM > 10:
@@ -38,14 +63,18 @@ func EngineOff():
 	else:
 		RPM = 0
 
-
-# Called when the node enters the scene tree for the first time.
-func _ready():
-	pass # Replace with function body.
-
-
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(_delta):
-	pass
-
+func ComputeTorque():
+	if Input.is_action_pressed("Accelerate"):
+		if Gear == 0:
+			Torque = RPM
+		else:
+			Torque = (RPM / Gear)
+	else:
+		if Torque > Resistance:
+			Torque -= Resistance
+		else:
+			Torque = 0
+	Resistance = Torque / Power
+	if Resistance < 1:
+		Resistance = 1
 
