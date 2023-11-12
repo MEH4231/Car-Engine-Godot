@@ -30,8 +30,9 @@ func _physics_process(delta):
 	$Car.move_and_slide()
 
 func _ready():
-	var Size = DisplayServer.screen_get_size() / 2
-	get_window().size = Size
-	get_window().mode = Window.MODE_FULLSCREEN
-	get_window().mode = Window.MODE_WINDOWED
-	get_window().position = (DisplayServer.screen_get_size() - Size) / 2
+	if OS.get_name() == "Linux":
+		var Size = DisplayServer.screen_get_size() / 2
+		get_window().size = Size
+		get_window().mode = Window.MODE_FULLSCREEN
+		get_window().mode = Window.MODE_WINDOWED
+		get_window().position = (DisplayServer.screen_get_size() - Size) / 2

@@ -1,13 +1,5 @@
 extends Node
 
-var EngineOn = false
-
-var Power = 100
-var Resistance = 1
-var Torque = 0
-var RPM = 0
-var Gear = 1
-
 var GearRatio0 = 1
 var GearRatio1 = 1
 var GearRatio2 = 0.8
@@ -18,6 +10,15 @@ var GearMaxRPM1 = 3500
 var GearMaxRPM2 = 6000
 var GearMaxRPM3 = 7800
 var GearMaxRPM4 = 9600
+
+var Power = 100
+var Resistance = 1
+
+var RPM = 0
+var Torque = 0
+var Gear = 1
+var EngineOn = false
+
 
 
 func _physics_process(_delta):
