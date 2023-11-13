@@ -19,10 +19,10 @@ func _physics_process(delta):
 	MaxSpeed = CarEngine.Torque / CarEngine.get("GearMult" + str(CarEngine.Gear))
 	
 	if Speed.x < MaxSpeed / CarEngine.get("GearMult" + str(CarEngine.Gear)):
-		Acceleration = (CarEngine.Torque * CarEngine.get("GearMult" + str(CarEngine.Gear))) * delta
+		Acceleration = (CarEngine.Torque * CarEngine.get("GearMult" + str(CarEngine.Gear)))# * delta
 	else:
 		pass
-		#$Car.velocity -= -$Car.transform.x / Resistance
+	$Car.velocity -= -$Car.transform.x * Resistance# * delta# / Resistance
 	Resistance = Speed.x / 50          
 	Speed = ($Car.position - LastPos) / delta
 	LastPos = $Car.position
