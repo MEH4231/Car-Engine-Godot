@@ -3,8 +3,8 @@ extends Node
 var MaxRPM = 6800
 var GearMult0 = 1
 var GearMult1 = 1
-var GearMult2 = 0.8
-var GearMult3 = 0.5
+var GearMult2 = 0.6
+var GearMult3 = 0.4
 var GearMult4 = 0.25
 
 var Power = 10
@@ -24,6 +24,8 @@ func _physics_process(delta):
 		RunEngine()
 	else:
 		EngineOff()
+	ComputeTorque()
+	
 
 func Controls():
 	if Input.is_action_just_pressed("GearUp"):
@@ -37,9 +39,13 @@ func Controls():
 
 func RunEngine():
 	if Input.is_action_pressed("Accelerate"):
-		if RPM < MaxRPM:
+		if RPM < MaxRPM / get("GearMult" + str(Gear)):
 			RPM += Power * get("GearMult" + str(Gear))
-			Torque = RPM * get("GearMult" + str(Gear))
+	else:
+		if RPM <= 800:
+			RPM += (RPM / 20) + 1
+		elif RPM > 800:
+			RPM -= (RPM / 20)
 
 func EngineOff():
 	if RPM > 10:
@@ -47,7 +53,17 @@ func EngineOff():
 	else:
 		RPM = 0
 
-
+func ComputeTorque():
+	if Input.is_action_pressed("Accelerate"):
+		if Gear == 0:
+			Torque = RPM
+		else:
+			Torque = (RPM * get("GearMult" + str(Gear)))
+	else:
+		if Torque > 1.2:
+			Torque /= 1.2
+		else:
+			Torque = 0
 
 
 
