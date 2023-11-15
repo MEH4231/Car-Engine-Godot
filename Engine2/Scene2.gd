@@ -37,7 +37,8 @@ func _physics_process(delta):
 #		if Resistance != 0:
 #			Acceleration *= 1 / Resistance
 	#if Resistance != 0:
-	$Car.velocity = $Car.velocity * 0.9
+	#if Resistance > 1 or Resistance < -1:
+	$Car.velocity /= Resistance#$Car.velocity * 0.9
 		#$Car.velocity = $Car.velocity / 1.1
 		#$Car.velocity = lerp($Car.velocity, Vector2(0,0),1 / Resistance)
 			#$Car.velocity -= Speed * min(delta/1.0, 1.0)
@@ -45,7 +46,7 @@ func _physics_process(delta):
 		#Acceleration /= -Resistance
 	print("           " + str(-$Car.transform.x * Resistance))
 	#$Car.velocity = -$Car.transform.x * Resistance# * delta# / Resistance
-	Resistance = Speed.x / 50
+	Resistance = (Speed.x + Speed.y) / 2 #/ 50
 	if Resistance == 0:
 		Resistance += 0.1 
 	Speed = ($Car.position - LastPos) / delta
