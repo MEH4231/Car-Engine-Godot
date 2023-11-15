@@ -1,0 +1,38 @@
+[gd_scene load_steps=7 format=3 uid="uid://dayfuh7lt04cr"]
+
+[ext_resource type="PackedScene" uid="uid://xi0w2is3lvi4" path="res://Engine2/Car2.tscn" id="1_dd5cu"]
+[ext_resource type="Texture2D" uid="uid://6f0xh7ro1fmp" path="res://Grid.png" id="2_7xflc"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_qyk38"]
+albedo_color = Color(0.235294, 0.235294, 0.235294, 1)
+albedo_texture = ExtResource("2_7xflc")
+uv1_triplanar = true
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_nusnu"]
+material = SubResource("StandardMaterial3D_qyk38")
+size = Vector2(1000, 1000)
+
+[sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_bxbxb"]
+points = PackedVector3Array(-500, 0, -500, -500, 0, 500, 500, 0, -500, 500, 0, 500)
+
+[sub_resource type="Environment" id="Environment_yqe8y"]
+background_mode = 1
+background_color = Color(1, 1, 1, 1)
+background_energy_multiplier = 3.22
+ambient_light_color = Color(1, 1, 1, 1)
+
+[node name="3DScene2" type="Node3D"]
+
+[node name="Car2" parent="." instance=ExtResource("1_dd5cu")]
+
+[node name="StaticBody3D" type="StaticBody3D" parent="."]
+
+[node name="Map" type="MeshInstance3D" parent="StaticBody3D"]
+mesh = SubResource("PlaneMesh_nusnu")
+skeleton = NodePath("../..")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D"]
+shape = SubResource("ConvexPolygonShape3D_bxbxb")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_yqe8y")

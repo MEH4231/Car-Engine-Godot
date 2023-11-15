@@ -7,7 +7,7 @@ var GearMult2 = 0.6
 var GearMult3 = 0.4
 var GearMult4 = 0.25
 
-var Power = 10
+var Power = 30
 
 var RPM = 0
 var Torque = 0
